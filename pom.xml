@@ -38,6 +38,12 @@
             <artifactId>spring-social-core</artifactId>
             <version>1.1.6.RELEASE</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.6</version>
+        </dependency>
 
     </dependencies>
 
@@ -49,6 +55,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>
