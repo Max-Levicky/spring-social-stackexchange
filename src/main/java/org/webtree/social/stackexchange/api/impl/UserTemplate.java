@@ -19,12 +19,12 @@ public class UserTemplate implements UserOperations {
     }
 
     @Override
-    public User getUserProfile() {
-        return null;
+    public List<User> getUserProfileAssociatedWithSite(String siteName) {
+        return api.fetchResponseWrapper("me?site=" + siteName, User.class).getItems();
     }
 
     @Override
     public List<NetworkUser> getUserAssociatedAccounts() {
-        return api.fetchResponseObject("me/associated", NetworkUser.class).getItems();
+        return api.fetchResponseWrapper("me/associated", NetworkUser.class).getItems();
     }
 }

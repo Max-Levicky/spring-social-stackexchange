@@ -1,5 +1,7 @@
 package org.webtree.social.stackexchange.api.impl;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -11,17 +13,19 @@ import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.social.support.URIBuilder;
 
 import org.springframework.web.client.RestTemplate;
-import org.webtree.social.stackexchange.api.BasicHttpRequestInterceptor;
-import org.webtree.social.stackexchange.api.ResponseObject;
-import org.webtree.social.stackexchange.api.StackExchange;
-import org.webtree.social.stackexchange.api.UserOperations;
+import org.webtree.social.stackexchange.api.*;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 
 /**
  * Created by Udjin Skobelev on 27.09.2018.
@@ -31,6 +35,7 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
 
     private final String accessToken;
     private final String apiVersion = "2.2";
+    private final Map<String, String> sites;
     private RestTemplate restTemplate;
     private UserOperations userOperations;
 
@@ -40,16 +45,37 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
         this.restTemplate = createRestTemplate(accessToken, key);
         setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         initSubApis();
+        this.sites = getActualSites();
     }
 
     public boolean isAuthorized() {
         return accessToken != null;
     }
 
+    public <T> ResponseWrapper<T> fetchResponseWrapper(String method, Class<T> type) {
+        URI uri = URIBuilder.fromUri(getBaseApiUrl() + method).build();
+        return getRestTemplate().exchange(uri, HttpMethod.GET, null, new ParameterizedTypeReference<ResponseWrapper<T>>() {
+            public Type getType() {
+                return new ParameterizedTypeImpl((ParameterizedType) super.getType(), new Type[]{type});
+            }
+        }).getBody();
+    }
+
+    public UserOperations userOperations() {
+        return userOperations;
+    }
+
+    public String getBaseApiUrl() {
+        return "https://api.stackexchange.com/" + apiVersion + "/";
+    }
+
+    public Map<String, String> getSites() {
+        return sites;
+    }
+
     protected RestTemplate getRestTemplate() {
         return restTemplate;
     }
-
 
     private FormHttpMessageConverter getFormMessageConverter() {
         FormHttpMessageConverter converter = new FormHttpMessageConverter();
@@ -117,17 +143,9 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
         this.userOperations = new UserTemplate(this, getRestTemplate());
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> ResponseObject<T> fetchResponseObject(String method, Class<T> type) {
-        URI uri = URIBuilder.fromUri(getBaseApiUrl() + method).build();
-        return getRestTemplate().getForObject(uri, ResponseObject.class);
-    }
-
-    public UserOperations userOperations() {
-        return userOperations;
-    }
-
-    public String getBaseApiUrl() {
-        return "https://api.stackexchange.com/" + apiVersion + "/";
+    private Map<String, String> getActualSites() {
+        return fetchResponseWrapper("sites", Site.class).getItems()
+                .stream()
+                .collect(Collectors.toMap(Site::getName, Site::getApiSiteParameter));
     }
 }

@@ -7,10 +7,6 @@ import java.util.List;
  */
 
 public interface UserOperations {
-
-    User getUserProfile();
-
-
-
+    List<User> getUserProfileAssociatedWithSite(String siteName);
     List<NetworkUser> getUserAssociatedAccounts();
 }
