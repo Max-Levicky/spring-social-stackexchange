@@ -12,7 +12,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseObject<T> {
 
-    private List<T> items;
+    private  List<T>  items;
     @JsonAlias("has_more")
     boolean hasmore;
     @JsonAlias("quota_max")
@@ -21,13 +21,9 @@ public class ResponseObject<T> {
     private Integer quotaRemaining;
 
 
-    public List<?> getItems() {
-        return items;
-    }
+    public List<T> getItems() { return items; }
 
-    public void setItems(List<T> items) {
-        this.items = items;
-    }
+    public void setItems(List<T> items) { this.items = items; }
 
     public boolean isHasmore() {
         return hasmore;

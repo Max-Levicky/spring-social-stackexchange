@@ -10,9 +10,9 @@ import org.springframework.social.ApiBinding;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.social.support.URIBuilder;
 
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.webtree.social.stackexchange.api.BasicHttpRequestInterceptor;
+import org.webtree.social.stackexchange.api.ResponseObject;
 import org.webtree.social.stackexchange.api.StackExchange;
 import org.webtree.social.stackexchange.api.UserOperations;
 
@@ -39,7 +39,6 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
         this.accessToken = accessToken;
         this.restTemplate = createRestTemplate(accessToken, key);
         setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-//        setRequestFactory(ClientHttpRequestFactorySelector.bufferRequests(getRestTemplate().getRequestFactory()));
         initSubApis();
     }
 
@@ -47,12 +46,12 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
         return accessToken != null;
     }
 
-    public RestTemplate getRestTemplate() {
+    protected RestTemplate getRestTemplate() {
         return restTemplate;
     }
 
 
-    protected FormHttpMessageConverter getFormMessageConverter() {
+    private FormHttpMessageConverter getFormMessageConverter() {
         FormHttpMessageConverter converter = new FormHttpMessageConverter();
         converter.setCharset(Charset.forName("UTF-8"));
         List<HttpMessageConverter<?>> partConverters = new ArrayList();
@@ -65,7 +64,7 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
         return converter;
     }
 
-    protected MappingJackson2HttpMessageConverter getJsonMessageConverter() {
+    private MappingJackson2HttpMessageConverter getJsonMessageConverter() {
         return new MappingJackson2HttpMessageConverter();
     }
 
@@ -118,19 +117,10 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
         this.userOperations = new UserTemplate(this, getRestTemplate());
     }
 
-    public <T> T fetchObject(String objectId, Class<T> type) {
-        URI uri = URIBuilder.fromUri(this.getBaseApiUrl() + objectId).build();
-        return this.getRestTemplate().getForObject(uri, type);
-    }
-
-    @Override
-    public <T> T fetchObject(String var1, Class<T> var2, String... var3) {
-        return null;
-    }
-
-    public <T> T fetchObject(String objectId, Class<T> type, MultiValueMap<String, String> queryParameters) {
-        URI uri = URIBuilder.fromUri(this.getBaseApiUrl() + objectId).queryParams(queryParameters).build();
-        return this.getRestTemplate().getForObject(uri, type);
+    @SuppressWarnings("unchecked")
+    public <T> ResponseObject<T> fetchResponseObject(String method, Class<T> type) {
+        URI uri = URIBuilder.fromUri(getBaseApiUrl() + method).build();
+        return getRestTemplate().getForObject(uri, ResponseObject.class);
     }
 
     public UserOperations userOperations() {

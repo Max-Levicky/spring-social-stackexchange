@@ -25,11 +25,6 @@ public class UserTemplate implements UserOperations {
 
     @Override
     public List<NetworkUser> getUserAssociatedAccounts() {
-        return getResponseObj().getItems();
-    }
-
-
-    public ResponseObject getResponseObj() {
-        return api.fetchObject("me/associated", ResponseObject.class);
+        return api.fetchResponseObject("me/associated", NetworkUser.class).getItems();
     }
 }
