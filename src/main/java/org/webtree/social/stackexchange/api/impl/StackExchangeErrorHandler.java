@@ -4,13 +4,13 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.social.*;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.webtree.social.stackexchange.api.StackExchangeError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -22,11 +22,10 @@ import static org.webtree.social.stackexchange.api.StackExchangeErrors.*;
 
 public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
 
-    private static final Log logger = LogFactory.getLog(StackExchangeErrorHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(StackExchangeErrorHandler.class);
     private static final String STACK_EXCHANGE_PROVIDER_ID = "stackExchange";
 
-
-    public StackExchangeErrorHandler() {
+    StackExchangeErrorHandler() {
     }
 
     public void handleError(ClientHttpResponse response) throws IOException {
@@ -62,9 +61,11 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
                     throw new RateLimitExceededException(STACK_EXCHANGE_PROVIDER_ID);
                 case EMPORARITY_UNAVAILABLE:
                     throw new ServerException(STACK_EXCHANGE_PROVIDER_ID, error.getMessage());
+                default:
+                    throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, "Something goes wrong", null);
             }
         } else {
-            throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, "Something goes wrong", null);
+            throw new ServerException(STACK_EXCHANGE_PROVIDER_ID, " Error code is " + statusCode);
         }
     }
 
@@ -78,12 +79,12 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
                 String message = jsonNode.get("error_message").asText();
                 String name = jsonNode.get("error_name").asText();
                 StackExchangeError error = new StackExchangeError(code, message, name);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StackExchange error: ");
-                    logger.debug("   CODE     : " + jsonNode.get("error_id"));
-                    logger.debug("   MESSAGE  : " + jsonNode.get("error_message"));
-                    logger.debug("   NAME     : " + jsonNode.get("error_name"));
-                }
+
+                logger.debug("StackExchange error: ");
+                logger.debug("   CODE     : {}", jsonNode.get("error_id"));
+                logger.debug("   MESSAGE  : {}", jsonNode.get("error_message"));
+                logger.debug("   NAME     : {}", jsonNode.get("error_name"));
+
                 return error;
             }
 
@@ -95,9 +96,7 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
 
     private String readResponseJson(ClientHttpResponse response) throws IOException {
         String json = this.readFully(response.getBody());
-        if (logger.isDebugEnabled()) {
-            logger.debug("Error from StackExchange: " + json);
-        }
+        logger.debug("Error from StackExchange: {}", json);
         return json;
     }
 
