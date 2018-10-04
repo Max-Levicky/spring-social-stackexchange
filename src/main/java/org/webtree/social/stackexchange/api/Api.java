@@ -5,6 +5,6 @@ package org.webtree.social.stackexchange.api;
  */
 
 public interface Api {
-    <T> ResponseWrapper<T> fetchResponseWrapper(String methodName, Class<T> itemsType);
+    <T> ResponseWrapper<T> fetchObject(String methodName, Class<T> itemsType);
     String getBaseApiUrl();
 }

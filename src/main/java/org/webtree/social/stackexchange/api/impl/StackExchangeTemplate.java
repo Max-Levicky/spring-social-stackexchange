@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class StackExchangeTemplate implements ApiBinding, StackExchange {
 
     private final String accessToken;
-    private final String apiVersion = "2.2";
+    private String apiVersion = "2.2";
     private RestTemplate restTemplate;
     private UserOperations userOperations;
     private SiteOperations siteOperations;
@@ -45,14 +45,13 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
         this.restTemplate = createRestTemplate(accessToken, key);
         setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         initSubApis();
-
     }
 
     public boolean isAuthorized() {
         return accessToken != null;
     }
 
-    public <T> ResponseWrapper<T> fetchResponseWrapper(String method, Class<T> type) {
+    public <T> ResponseWrapper<T> fetchObject(String method, Class<T> type) {
         URI uri = URIBuilder.fromUri(getBaseApiUrl() + method).build();
         return getRestTemplate().exchange(uri, HttpMethod.GET, null, new ParameterizedTypeReference<ResponseWrapper<T>>() {
             public Type getType() {

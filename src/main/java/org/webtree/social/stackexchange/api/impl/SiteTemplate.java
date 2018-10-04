@@ -22,6 +22,6 @@ public class SiteTemplate implements SiteOperations {
 
     @Override
     public List<Site> getActualSites() {
-        return api.fetchResponseWrapper("sites",Site.class).getItems();
+        return api.fetchObject("sites",Site.class).getItems();
     }
 }
