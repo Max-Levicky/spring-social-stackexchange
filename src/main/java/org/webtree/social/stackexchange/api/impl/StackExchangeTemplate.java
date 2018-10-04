@@ -35,9 +35,9 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
 
     private final String accessToken;
     private final String apiVersion = "2.2";
-    private final Map<String, String> sites;
     private RestTemplate restTemplate;
     private UserOperations userOperations;
+    private SiteOperations siteOperations;
 
 
     public StackExchangeTemplate(String accessToken, String key) {
@@ -45,7 +45,7 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
         this.restTemplate = createRestTemplate(accessToken, key);
         setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         initSubApis();
-        this.sites = getActualSites();
+
     }
 
     public boolean isAuthorized() {
@@ -69,11 +69,8 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
         return "https://api.stackexchange.com/" + apiVersion + "/";
     }
 
-    public Map<String, String> getSites() {
-        return sites;
-    }
 
-    protected RestTemplate getRestTemplate() {
+    private RestTemplate getRestTemplate() {
         return restTemplate;
     }
 
@@ -141,11 +138,6 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
 
     private void initSubApis() {
         this.userOperations = new UserTemplate(this, getRestTemplate());
-    }
-
-    private Map<String, String> getActualSites() {
-        return fetchResponseWrapper("sites", Site.class).getItems()
-                .stream()
-                .collect(Collectors.toMap(Site::getName, Site::getApiSiteParameter));
+        this.siteOperations = new SiteTemplate(this, getRestTemplate());
     }
 }
