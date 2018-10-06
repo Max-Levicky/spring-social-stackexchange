@@ -10,7 +10,7 @@ import org.webtree.social.stackexchange.api.StackExchange;
  * Created by Udjin Skobelev on 06.10.2018.
  */
 
-public class AbstractApiTest {
+public abstract class AbstractApiTest {
     private static String TOKEN = "abcde";
     private static String KEY = "fghij";
 
