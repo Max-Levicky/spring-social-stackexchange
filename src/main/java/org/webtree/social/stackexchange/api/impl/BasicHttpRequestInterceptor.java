@@ -1,4 +1,4 @@
-package org.webtree.social.stackexchange.api;
+package org.webtree.social.stackexchange.api.impl;
 
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;

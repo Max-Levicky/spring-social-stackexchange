@@ -29,7 +29,7 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
     }
 
     public void handleError(ClientHttpResponse response) throws IOException {
-        StackExchangeError error = this.extractErrorFromResponse(response);
+        StackExchangeError error = extractErrorFromResponse(response);
         handleStackExchangeError(response.getStatusCode(), error);
     }
 
@@ -70,7 +70,7 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
     }
 
     private StackExchangeError extractErrorFromResponse(ClientHttpResponse response) throws IOException {
-        String json = this.readResponseJson(response);
+        String json = readResponseJson(response);
         try {
             ObjectMapper mapper = new ObjectMapper(new JsonFactory());
             JsonNode jsonNode = mapper.readValue(json, JsonNode.class);
@@ -95,7 +95,7 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
     }
 
     private String readResponseJson(ClientHttpResponse response) throws IOException {
-        String json = this.readFully(response.getBody());
+        String json = readFully(response.getBody());
         logger.debug("Error from StackExchange: {}", json);
         return json;
     }
