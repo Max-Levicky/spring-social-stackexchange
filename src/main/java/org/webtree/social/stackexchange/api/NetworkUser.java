@@ -38,6 +38,14 @@ public class NetworkUser {
     @JsonProperty("site_name")
     private String siteName;
 
+    public NetworkUser() {
+    }
+
+    public NetworkUser(Integer userId, String siteName) {
+        this.userId = userId;
+        this.siteName = siteName;
+    }
+
     public Integer getQuestionCount() {
         return questionCount;
     }

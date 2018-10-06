@@ -9,9 +9,9 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.*;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.social.ApiBinding;
-import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.social.support.URIBuilder;
 
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.webtree.social.stackexchange.api.*;
 
@@ -58,16 +58,29 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
         }).getBody();
     }
 
+    @Override
+    public <T> ResponseWrapper<T> fetchObject(String methodName, Class<T> itemsType, MultiValueMap<String, String> queryParams) {
+        URI uri = URIBuilder.fromUri(getBaseApiUrl() + methodName).queryParams(queryParams).build();
+        return getRestTemplate().exchange(uri, HttpMethod.GET, null, new ParameterizedTypeReference<ResponseWrapper<T>>() {
+            public Type getType() {
+                return new ParameterizedTypeImpl((ParameterizedType) super.getType(), new Type[]{itemsType});
+            }
+        }).getBody();
+    }
+
     public UserOperations userOperations() {
         return userOperations;
+    }
+
+    public SiteOperations siteOperations() {
+        return siteOperations;
     }
 
     public String getBaseApiUrl() {
         return "https://api.stackexchange.com/" + apiVersion + "/";
     }
 
-
-    private RestTemplate getRestTemplate() {
+    RestTemplate getRestTemplate() {
         return restTemplate;
     }
 
@@ -100,17 +113,7 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
 
     private RestTemplate createRestTemplateWithCulledMessageConverters() {
         List messageConverters = getMessageConverters();
-
-        RestTemplate client;
-        try {
-            client = new RestTemplate(messageConverters);
-        } catch (NoSuchMethodError var4) {
-            client = new RestTemplate();
-
-            client.setMessageConverters(messageConverters);
-        }
-
-        client.setRequestFactory(ClientHttpRequestFactorySelector.getRequestFactory());
+        RestTemplate client = new RestTemplate(messageConverters);
         return client;
     }
 

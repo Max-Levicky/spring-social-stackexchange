@@ -14,30 +14,50 @@ public class Site {
 
     @JsonProperty("launch_date")
     private Date launchDate;
+
     @JsonProperty("open_beta_date")
     private Date openBetaDate;
+
     @JsonProperty("closed_beta_date")
     private Date closedBetaDate;
+
     @JsonProperty("site_state")
     private String siteState;
+
     @JsonProperty("twitter_account")
     private String twitterAccount;
+
     @JsonProperty("favicon_url")
     private String faviconUrl;
+
     @JsonProperty("icon_url")
     private String iconUrl;
+
     @JsonProperty("audience")
     private String audience;
+
     @JsonProperty("site_url")
     private String siteUrl;
+
     @JsonProperty("api_site_parameter")
     private String apiSiteParameter;
+
     @JsonProperty("logo_url")
     private String logoUrl;
+
     @JsonProperty("name")
     private String name;
+
     @JsonProperty("site_type")
     private String siteType;
+
+    public Site() {
+    }
+
+    public Site(String apiSiteParameter, String name) {
+        this.apiSiteParameter = apiSiteParameter;
+        this.name = name;
+    }
 
     public Date getLaunchDate() {
         return launchDate;

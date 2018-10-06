@@ -5,4 +5,5 @@ package org.webtree.social.stackexchange.api;
  */
 public interface StackExchange extends Api{
     UserOperations userOperations();
+    SiteOperations siteOperations();
 }

@@ -1,5 +1,7 @@
 package org.webtree.social.stackexchange.api.impl;
 
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.webtree.social.stackexchange.api.*;
 
@@ -20,7 +22,9 @@ public class UserTemplate implements UserOperations {
 
     @Override
     public List<User> getUserProfileAssociatedWithSite(String siteName) {
-        return api.fetchObject("me?site=" + siteName, User.class).getItems();
+        MultiValueMap<String,String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("site",siteName);
+        return api.fetchObject("me", User.class,queryParams).getItems();
     }
 
     @Override

@@ -60,6 +60,15 @@ public class User {
     @JsonProperty("display_name")
     private String displayName;
 
+    public User() {
+    }
+
+    public User(Integer accountId, Integer userId, String displayName) {
+        this.accountId = accountId;
+        this.userId = userId;
+        this.displayName = displayName;
+    }
+
     public Integer getAccountId() {
         return accountId;
     }
