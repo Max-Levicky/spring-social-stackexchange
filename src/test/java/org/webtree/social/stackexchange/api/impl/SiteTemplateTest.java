@@ -23,21 +23,19 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
  */
 public class SiteTemplateTest extends AbstractApiTest {
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        List<Site> sites = Arrays.asList(new Site("stack", "stack overflow"), new Site("apps", "stack apps"));
-        responseWrapper = new ResponseWrapper<>(sites, true, 0, 1);
-    }
-
     @Test
     public void shouldReturnSites() throws JsonProcessingException {
+        Site stack = new Site("stack", "stack overflow");
+        Site apps = new Site("apps", "stack apps");
+        List<Site> sites = Arrays.asList(stack, apps);
+        responseWrapper = new ResponseWrapper<>(sites, true, 0, 1);
+
         server
                 .expect(requestTo(stackExchange.getBaseApiUrl() + "sites?" + tokenQueryParams))
                 .andRespond(withSuccess(objectMapper.writeValueAsString(responseWrapper), MediaType.APPLICATION_JSON));
 
-        List<Site> sites = stackExchange.siteOperations().getActualSites();
-        assertThat(sites.size()).isEqualTo(2);
+        List<Site> sitesFromApi = stackExchange.siteOperations().getActualSites();
+        assertThat(sitesFromApi).containsExactlyInAnyOrder(stack, apps);
         server.verify();
     }
 }

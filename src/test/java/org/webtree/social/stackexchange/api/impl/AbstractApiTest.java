@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.webtree.social.stackexchange.api.ResponseWrapper;
-import org.webtree.social.stackexchange.api.Site;
 import org.webtree.social.stackexchange.api.StackExchange;
 
 /**
@@ -17,7 +16,7 @@ public class AbstractApiTest {
 
     protected StackExchange stackExchange;
     protected MockRestServiceServer server;
-    protected ResponseWrapper<Site> responseWrapper;
+    protected ResponseWrapper responseWrapper;
     protected ObjectMapper objectMapper;
     protected String tokenQueryParams;
 

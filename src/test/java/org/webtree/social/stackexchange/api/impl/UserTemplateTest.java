@@ -1,6 +1,5 @@
 package org.webtree.social.stackexchange.api.impl;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -24,34 +23,33 @@ public class UserTemplateTest extends AbstractApiTest {
 
     @Test
     public void shouldReturnNetworkUsers() throws JsonProcessingException {
-        List<NetworkUser> users = Arrays.asList(
-                new NetworkUser(2, "stack"),
-                new NetworkUser(3, "math"));
-
-        ResponseWrapper<NetworkUser> wrapper = new ResponseWrapper<>(users, true, 1, 2);
+        NetworkUser fromStack = new NetworkUser(2, "stack");
+        NetworkUser fromMath = new NetworkUser(3, "math");
+        List<NetworkUser> users = Arrays.asList(fromStack, fromMath);
+        responseWrapper = new ResponseWrapper<>(users, true, 1, 2);
 
         server
                 .expect(requestTo(stackExchange.getBaseApiUrl() + "me/associated?" + tokenQueryParams))
-                .andRespond(withSuccess(objectMapper.writeValueAsString(wrapper), MediaType.APPLICATION_JSON));
+                .andRespond(withSuccess(objectMapper.writeValueAsString(responseWrapper), MediaType.APPLICATION_JSON));
 
         List<NetworkUser> usersFromApi = stackExchange.userOperations().getUserAssociatedAccounts();
-        assertThat(usersFromApi.size()).isEqualTo(2);
+        assertThat(usersFromApi).containsExactlyInAnyOrder(fromStack, fromMath);
         server.verify();
     }
 
     @Test
     public void shouldReturnUsersBySiteName() throws JsonProcessingException {
-        String siteApiName = "stack";
-        List<User> users = Arrays.asList(new User(3, 4, "John"));
-
-        ResponseWrapper<User> wrapper = new ResponseWrapper<>(users, true, 1, 2);
+        String siteApiName = "stackexchange";
+        User user = new User(3, 4, "John");
+        List<User> users = Arrays.asList(user);
+        responseWrapper = new ResponseWrapper<>(users, true, 1, 2);
 
         server
                 .expect(requestTo(stackExchange.getBaseApiUrl() + "me?site=" + siteApiName + "&" + tokenQueryParams))
-                .andRespond(withSuccess(objectMapper.writeValueAsString(wrapper), MediaType.APPLICATION_JSON));
+                .andRespond(withSuccess(objectMapper.writeValueAsString(responseWrapper), MediaType.APPLICATION_JSON));
 
         List<User> usersFromApi = stackExchange.userOperations().getUserProfileAssociatedWithSite(siteApiName);
-        assertThat(usersFromApi.size()).isEqualTo(1);
+        assertThat(usersFromApi).contains(user);
         server.verify();
     }
 }
