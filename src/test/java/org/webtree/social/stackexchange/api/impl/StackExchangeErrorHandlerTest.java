@@ -13,7 +13,7 @@ import org.webtree.social.stackexchange.api.StackExchangeError;
 
 import java.io.IOException;
 
-import static org.webtree.social.stackexchange.api.StackExchangeErrors.*;
+import static org.webtree.social.stackexchange.api.ErrorCodes.*;
 
 
 /**

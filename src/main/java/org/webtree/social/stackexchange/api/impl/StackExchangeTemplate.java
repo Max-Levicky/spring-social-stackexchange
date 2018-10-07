@@ -14,6 +14,8 @@ import org.springframework.social.support.URIBuilder;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.webtree.social.stackexchange.api.*;
+import org.webtree.social.stackexchange.domain.ResponseWrapper;
+import org.webtree.social.stackexchange.interceptor.BasicHttpRequestInterceptor;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

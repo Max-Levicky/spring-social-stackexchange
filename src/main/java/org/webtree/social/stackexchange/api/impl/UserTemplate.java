@@ -4,6 +4,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.webtree.social.stackexchange.api.*;
+import org.webtree.social.stackexchange.domain.NetworkUser;
+import org.webtree.social.stackexchange.domain.User;
 
 import java.util.List;
 

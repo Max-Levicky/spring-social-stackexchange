@@ -3,7 +3,7 @@ package org.webtree.social.stackexchange.api.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.springframework.test.web.client.MockRestServiceServer;
-import org.webtree.social.stackexchange.api.ResponseWrapper;
+import org.webtree.social.stackexchange.domain.ResponseWrapper;
 import org.webtree.social.stackexchange.api.StackExchange;
 
 /**

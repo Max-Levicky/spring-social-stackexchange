@@ -1,8 +1,8 @@
-package org.webtree.social.stackexchange.api.impl;
+package org.webtree.social.stackexchange.api.impl.integration;
 
 import org.junit.Test;
-import org.webtree.social.stackexchange.api.NetworkUser;
-import org.webtree.social.stackexchange.api.User;
+import org.webtree.social.stackexchange.domain.NetworkUser;
+import org.webtree.social.stackexchange.domain.User;
 
 import java.util.List;
 

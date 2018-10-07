@@ -4,7 +4,7 @@ package org.webtree.social.stackexchange.api;
  * Created by Udjin Skobelev on 02.10.2018.
  */
 
-public class StackExchangeErrors {
+public class ErrorCodes {
     public static final int BAD_PARAMETER = 400;
     public static final int ACCESS_TOKEN_REQUIRED = 401;
     public static final int INVALID_ACCESS_TOKEN = 402;

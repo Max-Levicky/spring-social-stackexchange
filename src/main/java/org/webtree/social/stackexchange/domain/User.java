@@ -1,4 +1,4 @@
-package org.webtree.social.stackexchange.api;
+package org.webtree.social.stackexchange.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,5 +1,8 @@
 package org.webtree.social.stackexchange.api;
 
+import org.webtree.social.stackexchange.domain.NetworkUser;
+import org.webtree.social.stackexchange.domain.User;
+
 import java.util.List;
 
 /**

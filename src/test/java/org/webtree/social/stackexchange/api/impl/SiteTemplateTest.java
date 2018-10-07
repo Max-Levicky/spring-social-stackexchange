@@ -2,12 +2,11 @@ package org.webtree.social.stackexchange.api.impl;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.Before;
 
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import org.webtree.social.stackexchange.api.ResponseWrapper;
-import org.webtree.social.stackexchange.api.Site;
+import org.webtree.social.stackexchange.domain.ResponseWrapper;
+import org.webtree.social.stackexchange.domain.Site;
 
 import java.util.Arrays;
 import java.util.List;

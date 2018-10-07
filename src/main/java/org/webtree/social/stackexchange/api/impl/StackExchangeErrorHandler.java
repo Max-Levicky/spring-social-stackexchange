@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
-import static org.webtree.social.stackexchange.api.StackExchangeErrors.*;
+import static org.webtree.social.stackexchange.api.ErrorCodes.*;
 
 /**
  * Created by Udjin Skobelev on 29.09.2018.

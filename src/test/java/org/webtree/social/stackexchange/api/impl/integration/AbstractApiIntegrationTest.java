@@ -1,7 +1,8 @@
-package org.webtree.social.stackexchange.api.impl;
+package org.webtree.social.stackexchange.api.impl.integration;
 
 import org.junit.Before;
 import org.webtree.social.stackexchange.api.StackExchange;
+import org.webtree.social.stackexchange.api.impl.StackExchangeTemplate;
 
 /**
  * Created by Udjin Skobelev on 06.10.2018.

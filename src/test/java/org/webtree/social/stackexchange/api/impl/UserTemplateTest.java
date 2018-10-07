@@ -3,9 +3,9 @@ package org.webtree.social.stackexchange.api.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import org.webtree.social.stackexchange.api.NetworkUser;
-import org.webtree.social.stackexchange.api.ResponseWrapper;
-import org.webtree.social.stackexchange.api.User;
+import org.webtree.social.stackexchange.domain.NetworkUser;
+import org.webtree.social.stackexchange.domain.ResponseWrapper;
+import org.webtree.social.stackexchange.domain.User;
 
 
 import java.util.Arrays;

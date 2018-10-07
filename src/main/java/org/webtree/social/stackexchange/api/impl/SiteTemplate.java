@@ -2,7 +2,7 @@ package org.webtree.social.stackexchange.api.impl;
 
 import org.springframework.web.client.RestTemplate;
 import org.webtree.social.stackexchange.api.Api;
-import org.webtree.social.stackexchange.api.Site;
+import org.webtree.social.stackexchange.domain.Site;
 import org.webtree.social.stackexchange.api.SiteOperations;
 
 import java.util.List;
