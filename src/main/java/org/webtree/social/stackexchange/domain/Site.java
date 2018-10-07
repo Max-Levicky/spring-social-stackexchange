@@ -2,6 +2,8 @@ package org.webtree.social.stackexchange.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.webtree.social.stackexchange.converter.UnixTimestampToMillisecondsConverter;
 
 import java.util.Date;
 
@@ -12,12 +14,15 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Site {
 
+    @JsonDeserialize(using = UnixTimestampToMillisecondsConverter.class)
     @JsonProperty("launch_date")
     private Date launchDate;
 
+    @JsonDeserialize(using = UnixTimestampToMillisecondsConverter.class)
     @JsonProperty("open_beta_date")
     private Date openBetaDate;
 
+    @JsonDeserialize(using = UnixTimestampToMillisecondsConverter.class)
     @JsonProperty("closed_beta_date")
     private Date closedBetaDate;
 

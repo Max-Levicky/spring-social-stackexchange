@@ -3,6 +3,8 @@ package org.webtree.social.stackexchange.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.webtree.social.stackexchange.converter.UnixTimestampToMillisecondsConverter;
 
 import java.util.Date;
 
@@ -19,9 +21,11 @@ public class NetworkUser {
     @JsonProperty("answer_count")
     private Integer answerCount;
 
+    @JsonDeserialize(using = UnixTimestampToMillisecondsConverter.class)
     @JsonProperty("last_access_date")
     private Date lastAccessDate;
 
+    @JsonDeserialize(using = UnixTimestampToMillisecondsConverter.class)
     @JsonProperty("creation_date")
     private Date creationDate;
 
