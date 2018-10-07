@@ -25,3 +25,4 @@
 /.nb-gradle/
 /.mvn/
 /springFacebook/
+/src/test/resources/system.property

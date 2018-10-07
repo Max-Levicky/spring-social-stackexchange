@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.webtree.social.stackexchange.domain.Site;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -12,9 +13,18 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
  */
 
 public class SiteTemplateIntegrationTest extends AbstractApiIntegrationTest {
+    private static String SELECTED_SITE = "stackoverflow";
+
     @Test
     public void shouldGetSitesFromApi() {
         List<Site> sites = stackExchange.siteOperations().getActualSites();
         assertThat(sites).isNotEmpty();
+    }
+
+    @Test
+    public void shouldHasSelectedSiteInResponse() {
+        List<Site> sites = stackExchange.siteOperations().getActualSites();
+        Optional<Site> selectedSite = sites.stream().filter((site) -> site.getApiSiteParameter().equals(SELECTED_SITE)).findFirst();
+        assertThat(selectedSite.isPresent()).isTrue();
     }
 }

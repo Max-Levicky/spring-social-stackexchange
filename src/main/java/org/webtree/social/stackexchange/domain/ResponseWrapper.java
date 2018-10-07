@@ -38,7 +38,7 @@ public class ResponseWrapper<T> {
         return items;
     }
 
-    public boolean isHasMore() {
+    public boolean hasMore() {
         return hasMore;
     }
 
