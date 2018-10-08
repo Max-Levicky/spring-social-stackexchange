@@ -15,8 +15,8 @@ public abstract class AbstractApiIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        TOKEN = System.getProperty("token");
-        APP_KEY = System.getProperty("key");
+        TOKEN =  System.getenv("stackexchange.token");
+        APP_KEY = System.getenv("stackexchange.key");
         stackExchange = new StackExchangeTemplate(TOKEN, APP_KEY);
     }
 }
