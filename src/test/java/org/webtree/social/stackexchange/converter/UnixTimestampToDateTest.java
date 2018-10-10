@@ -18,17 +18,17 @@ import static org.mockito.Mockito.when;
  */
 
 @RunWith(MockitoJUnitRunner.class)
-public class UnixTimestampToMillisecondsConverterTest {
+public class UnixTimestampToDateTest {
     private final static String UNIX_TIME_IN_SECONDS = "1217462400";
 
     @Mock
     private JsonParser parser;
-    private UnixTimestampToMillisecondsConverter converter;
+    private UnixTimestampToDate converter;
 
     @Test
     public void name() throws IOException {
         Date dateAfterConverting = new Date(TimeUnit.SECONDS.toMillis(Long.valueOf(UNIX_TIME_IN_SECONDS)));
-        converter = new UnixTimestampToMillisecondsConverter();
+        converter = new UnixTimestampToDate();
         when(parser.getText()).thenReturn(UNIX_TIME_IN_SECONDS);
         assertThat(converter.deserialize(parser, null)).isEqualTo(dateAfterConverting);
     }
