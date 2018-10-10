@@ -1,8 +1,8 @@
 package org.webtree.social.stackexchange.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,17 +12,15 @@ import java.util.Objects;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ResponseWrapper<T> {
 
     private List<T> items;
 
-    @JsonProperty("has_more")
     private boolean hasMore;
 
-    @JsonProperty("quota_max")
     private Integer quotaMax;
 
-    @JsonProperty("quota_remaining")
     private Integer quotaRemaining;
 
     public ResponseWrapper(List<T> items, boolean hasMore, Integer quotaMax, Integer quotaRemaining) {
@@ -64,7 +62,6 @@ public class ResponseWrapper<T> {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(items, hasMore, quotaMax, quotaRemaining);
     }
 }

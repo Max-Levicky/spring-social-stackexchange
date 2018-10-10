@@ -1,9 +1,9 @@
 package org.webtree.social.stackexchange.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.webtree.social.stackexchange.converter.UnixTimestampToDate;
 
 import java.util.Date;
@@ -14,33 +14,27 @@ import java.util.Objects;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class NetworkUser {
 
-    @JsonProperty("question_count")
     private Integer questionCount;
 
-    @JsonProperty("answer_count")
     private Integer answerCount;
 
     @JsonDeserialize(using = UnixTimestampToDate.class)
-    @JsonProperty("last_access_date")
     private Date lastAccessDate;
 
     @JsonDeserialize(using = UnixTimestampToDate.class)
-    @JsonProperty("creation_date")
     private Date creationDate;
 
-    @JsonProperty("account_id")
     private Integer accountId;
 
     private Integer reputation;
-    @JsonProperty("user_id")
+
     private Integer userId;
 
-    @JsonProperty("site_url")
     private String siteUrl;
 
-    @JsonProperty("site_name")
     private String siteName;
 
     public NetworkUser() {

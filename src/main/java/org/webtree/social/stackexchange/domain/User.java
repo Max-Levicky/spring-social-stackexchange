@@ -1,8 +1,9 @@
 package org.webtree.social.stackexchange.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.webtree.social.stackexchange.converter.UnixTimestampToDate;
 
 import java.util.Date;
@@ -13,56 +14,41 @@ import java.util.Objects;
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class User {
 
-    @JsonProperty("account_id")
     private Integer accountId;
 
-    @JsonProperty("is_employee")
     private boolean isEmployee;
 
     @JsonDeserialize(using = UnixTimestampToDate.class)
-    @JsonProperty("last_access_date")
     private Date lastAccessDate;
 
-    @JsonProperty("reputation_change_year")
     private Integer reputationChangeYear;
 
-    @JsonProperty("reputation_change_quarter")
     private Integer reputationChangeQuarter;
 
-    @JsonProperty("reputation_change_month")
     private Integer reputationChangeMonth;
 
-    @JsonProperty("reputation_change_week")
     private Integer reputationChangeWeek;
 
-    @JsonProperty("reputation_change_day")
     private Integer reputationChangeDay;
 
-    @JsonProperty("reputation")
     private Integer reputation;
 
     @JsonDeserialize(using = UnixTimestampToDate.class)
-    @JsonProperty("creation_date")
     private Date creationDate;
 
-    @JsonProperty("user_type")
     private String userType;
 
-    @JsonProperty("user_id")
     private Integer userId;
 
-    @JsonProperty("location")
     private String location;
 
-    @JsonProperty("link")
     private String link;
 
-    @JsonProperty("profile_image")
     private String profileImage;
 
-    @JsonProperty("display_name")
     private String displayName;
 
     public User() {
