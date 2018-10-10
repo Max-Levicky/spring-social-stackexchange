@@ -26,7 +26,7 @@ public class SiteTemplateIntegrationTest extends AbstractApiIntegrationTest {
         List<Site> sites = stackExchange.siteOperations().getActualSites();
         Optional<Site> selectedSite = sites.stream().filter((site) -> site.getApiSiteParameter().equals(SELECTED_SITE)).findFirst();
         assertThat(selectedSite.isPresent()).isTrue();
-        assertThat(selectedSite.get().getApiSiteParameter()).isNotNull();
-        assertThat(selectedSite.get().getName()).isNotNull();
+        assertThat(selectedSite.get().getApiSiteParameter()).isNotEmpty();
+        assertThat(selectedSite.get().getName()).isNotEmpty();
     }
 }

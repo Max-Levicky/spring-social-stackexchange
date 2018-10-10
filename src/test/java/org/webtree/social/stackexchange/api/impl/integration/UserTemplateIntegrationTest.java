@@ -19,8 +19,8 @@ public class UserTemplateIntegrationTest extends AbstractApiIntegrationTest {
     public void shouldReturnUserAssociatedAccounts() {
         List<NetworkUser> users = stackExchange.userOperations().getUserAssociatedAccounts();
         assertThat(users).isNotEmpty();
-        assertThat(users.get(0).getSiteName()).isNotNull();
-        assertThat(users.get(0).getAccountId()).isNotNull();
+        assertThat(users.get(0).getSiteName()).isNotEmpty();
+        assertThat(users.get(0).getAccountId()).isNotNull().isPositive();
     }
 
     @Test
@@ -28,7 +28,7 @@ public class UserTemplateIntegrationTest extends AbstractApiIntegrationTest {
         List<User> users = stackExchange.userOperations().getUserProfileAssociatedWithSite(SITE_API_NAME);
         assertThat(users).isNotEmpty();
         assertThat(users.get(0).getReputation()).isNotNull().isPositive();
-        assertThat(users.get(0).getAccountId()).isNotNull();
-        assertThat(users.get(0).getDisplayName()).isNotNull();
+        assertThat(users.get(0).getAccountId()).isNotNull().isPositive();
+        assertThat(users.get(0).getDisplayName()).isNotEmpty();
     }
 }
