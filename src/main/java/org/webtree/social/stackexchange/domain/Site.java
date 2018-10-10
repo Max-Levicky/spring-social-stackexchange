@@ -3,9 +3,10 @@ package org.webtree.social.stackexchange.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.webtree.social.stackexchange.converter.UnixTimestampToMillisecondsConverter;
+import org.webtree.social.stackexchange.converter.UnixTimestampToDate;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by Udjin Skobelev on 03.10.2018.
@@ -14,15 +15,15 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Site {
 
-    @JsonDeserialize(using = UnixTimestampToMillisecondsConverter.class)
+    @JsonDeserialize(using = UnixTimestampToDate.class)
     @JsonProperty("launch_date")
     private Date launchDate;
 
-    @JsonDeserialize(using = UnixTimestampToMillisecondsConverter.class)
+    @JsonDeserialize(using = UnixTimestampToDate.class)
     @JsonProperty("open_beta_date")
     private Date openBetaDate;
 
-    @JsonDeserialize(using = UnixTimestampToMillisecondsConverter.class)
+    @JsonDeserialize(using = UnixTimestampToDate.class)
     @JsonProperty("closed_beta_date")
     private Date closedBetaDate;
 
@@ -120,42 +121,25 @@ public class Site {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Site site = (Site) o;
-
-        if (launchDate != null ? !launchDate.equals(site.launchDate) : site.launchDate != null) return false;
-        if (openBetaDate != null ? !openBetaDate.equals(site.openBetaDate) : site.openBetaDate != null) return false;
-        if (closedBetaDate != null ? !closedBetaDate.equals(site.closedBetaDate) : site.closedBetaDate != null)
-            return false;
-        if (siteState != null ? !siteState.equals(site.siteState) : site.siteState != null) return false;
-        if (twitterAccount != null ? !twitterAccount.equals(site.twitterAccount) : site.twitterAccount != null)
-            return false;
-        if (faviconUrl != null ? !faviconUrl.equals(site.faviconUrl) : site.faviconUrl != null) return false;
-        if (iconUrl != null ? !iconUrl.equals(site.iconUrl) : site.iconUrl != null) return false;
-        if (audience != null ? !audience.equals(site.audience) : site.audience != null) return false;
-        if (siteUrl != null ? !siteUrl.equals(site.siteUrl) : site.siteUrl != null) return false;
-        if (apiSiteParameter != null ? !apiSiteParameter.equals(site.apiSiteParameter) : site.apiSiteParameter != null)
-            return false;
-        if (logoUrl != null ? !logoUrl.equals(site.logoUrl) : site.logoUrl != null) return false;
-        if (name != null ? !name.equals(site.name) : site.name != null) return false;
-        return siteType != null ? siteType.equals(site.siteType) : site.siteType == null;
+        return Objects.equals(launchDate, site.launchDate) &&
+                Objects.equals(openBetaDate, site.openBetaDate) &&
+                Objects.equals(closedBetaDate, site.closedBetaDate) &&
+                Objects.equals(siteState, site.siteState) &&
+                Objects.equals(twitterAccount, site.twitterAccount) &&
+                Objects.equals(faviconUrl, site.faviconUrl) &&
+                Objects.equals(iconUrl, site.iconUrl) &&
+                Objects.equals(audience, site.audience) &&
+                Objects.equals(siteUrl, site.siteUrl) &&
+                Objects.equals(apiSiteParameter, site.apiSiteParameter) &&
+                Objects.equals(logoUrl, site.logoUrl) &&
+                Objects.equals(name, site.name) &&
+                Objects.equals(siteType, site.siteType);
     }
 
     @Override
     public int hashCode() {
-        int result = launchDate != null ? launchDate.hashCode() : 0;
-        result = 31 * result + (openBetaDate != null ? openBetaDate.hashCode() : 0);
-        result = 31 * result + (closedBetaDate != null ? closedBetaDate.hashCode() : 0);
-        result = 31 * result + (siteState != null ? siteState.hashCode() : 0);
-        result = 31 * result + (twitterAccount != null ? twitterAccount.hashCode() : 0);
-        result = 31 * result + (faviconUrl != null ? faviconUrl.hashCode() : 0);
-        result = 31 * result + (iconUrl != null ? iconUrl.hashCode() : 0);
-        result = 31 * result + (audience != null ? audience.hashCode() : 0);
-        result = 31 * result + (siteUrl != null ? siteUrl.hashCode() : 0);
-        result = 31 * result + (apiSiteParameter != null ? apiSiteParameter.hashCode() : 0);
-        result = 31 * result + (logoUrl != null ? logoUrl.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (siteType != null ? siteType.hashCode() : 0);
-        return result;
+
+        return Objects.hash(launchDate, openBetaDate, closedBetaDate, siteState, twitterAccount, faviconUrl, iconUrl, audience, siteUrl, apiSiteParameter, logoUrl, name, siteType);
     }
 }

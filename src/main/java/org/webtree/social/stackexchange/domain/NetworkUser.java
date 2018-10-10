@@ -4,9 +4,10 @@ package org.webtree.social.stackexchange.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.webtree.social.stackexchange.converter.UnixTimestampToMillisecondsConverter;
+import org.webtree.social.stackexchange.converter.UnixTimestampToDate;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by Udjin Skobelev on 30.09.2018.
@@ -21,11 +22,11 @@ public class NetworkUser {
     @JsonProperty("answer_count")
     private Integer answerCount;
 
-    @JsonDeserialize(using = UnixTimestampToMillisecondsConverter.class)
+    @JsonDeserialize(using = UnixTimestampToDate.class)
     @JsonProperty("last_access_date")
     private Date lastAccessDate;
 
-    @JsonDeserialize(using = UnixTimestampToMillisecondsConverter.class)
+    @JsonDeserialize(using = UnixTimestampToDate.class)
     @JsonProperty("creation_date")
     private Date creationDate;
 
@@ -90,33 +91,21 @@ public class NetworkUser {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         NetworkUser that = (NetworkUser) o;
-
-        if (questionCount != null ? !questionCount.equals(that.questionCount) : that.questionCount != null)
-            return false;
-        if (answerCount != null ? !answerCount.equals(that.answerCount) : that.answerCount != null) return false;
-        if (lastAccessDate != null ? !lastAccessDate.equals(that.lastAccessDate) : that.lastAccessDate != null)
-            return false;
-        if (creationDate != null ? !creationDate.equals(that.creationDate) : that.creationDate != null) return false;
-        if (accountId != null ? !accountId.equals(that.accountId) : that.accountId != null) return false;
-        if (reputation != null ? !reputation.equals(that.reputation) : that.reputation != null) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        if (siteUrl != null ? !siteUrl.equals(that.siteUrl) : that.siteUrl != null) return false;
-        return siteName != null ? siteName.equals(that.siteName) : that.siteName == null;
+        return Objects.equals(questionCount, that.questionCount) &&
+                Objects.equals(answerCount, that.answerCount) &&
+                Objects.equals(lastAccessDate, that.lastAccessDate) &&
+                Objects.equals(creationDate, that.creationDate) &&
+                Objects.equals(accountId, that.accountId) &&
+                Objects.equals(reputation, that.reputation) &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(siteUrl, that.siteUrl) &&
+                Objects.equals(siteName, that.siteName);
     }
 
     @Override
     public int hashCode() {
-        int result = questionCount != null ? questionCount.hashCode() : 0;
-        result = 31 * result + (answerCount != null ? answerCount.hashCode() : 0);
-        result = 31 * result + (lastAccessDate != null ? lastAccessDate.hashCode() : 0);
-        result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
-        result = 31 * result + (accountId != null ? accountId.hashCode() : 0);
-        result = 31 * result + (reputation != null ? reputation.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (siteUrl != null ? siteUrl.hashCode() : 0);
-        result = 31 * result + (siteName != null ? siteName.hashCode() : 0);
-        return result;
+
+        return Objects.hash(questionCount, answerCount, lastAccessDate, creationDate, accountId, reputation, userId, siteUrl, siteName);
     }
 }

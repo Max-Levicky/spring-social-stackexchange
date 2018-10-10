@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Udjin Skobelev on 30.09.2018.
@@ -48,6 +49,23 @@ public class ResponseWrapper<T> {
 
     public Integer getQuotaRemaining() {
         return quotaRemaining;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResponseWrapper<?> that = (ResponseWrapper<?>) o;
+        return hasMore == that.hasMore &&
+                Objects.equals(items, that.items) &&
+                Objects.equals(quotaMax, that.quotaMax) &&
+                Objects.equals(quotaRemaining, that.quotaRemaining);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(items, hasMore, quotaMax, quotaRemaining);
     }
 }
 
