@@ -1,6 +1,7 @@
 package org.webtree.social.stackexchange.api.impl.integration;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.webtree.social.stackexchange.domain.Site;
 
 import java.util.List;

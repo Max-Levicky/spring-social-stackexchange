@@ -1,6 +1,7 @@
 package org.webtree.social.stackexchange.api.impl.integration;
 
-import org.junit.Before;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.webtree.social.stackexchange.api.StackExchange;
 import org.webtree.social.stackexchange.api.impl.StackExchangeTemplate;
 
@@ -13,7 +14,7 @@ public abstract class AbstractApiIntegrationTest {
     static String APP_KEY;
     StackExchange stackExchange;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         TOKEN =  System.getenv("stackexchange_token");
         APP_KEY = System.getenv("stackexchange_key");

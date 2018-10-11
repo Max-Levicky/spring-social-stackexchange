@@ -1,7 +1,8 @@
 package org.webtree.social.stackexchange.api.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.webtree.social.stackexchange.domain.NetworkUser;
 import org.webtree.social.stackexchange.domain.ResponseWrapper;
@@ -34,8 +35,7 @@ public class UserTemplateTest extends AbstractApiTest {
 
         List<NetworkUser> usersFromApi = stackExchange.userOperations().getUserAssociatedAccounts();
         assertThat(usersFromApi).containsExactlyInAnyOrder(fromStack, fromMath);
-        server.verify();
-    }
+        }
 
     @Test
     public void shouldReturnUsersBySiteName() throws JsonProcessingException {
@@ -50,6 +50,5 @@ public class UserTemplateTest extends AbstractApiTest {
 
         List<User> usersFromApi = stackExchange.userOperations().getUserProfileAssociatedWithSite(siteApiName);
         assertThat(usersFromApi).contains(user);
-        server.verify();
-    }
+        }
 }

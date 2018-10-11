@@ -1,7 +1,9 @@
 package org.webtree.social.stackexchange.api.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.webtree.social.stackexchange.domain.ResponseWrapper;
 import org.webtree.social.stackexchange.api.StackExchange;
@@ -20,11 +22,16 @@ public abstract class AbstractApiTest {
     protected ObjectMapper objectMapper;
     protected String tokenQueryParams;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         objectMapper = new ObjectMapper();
         stackExchange = new StackExchangeTemplate(TOKEN, KEY);
         server = MockRestServiceServer.createServer(((StackExchangeTemplate) stackExchange).getRestTemplate());
         tokenQueryParams =  "key=" + KEY + "&" + "access_token=" + TOKEN;
+    }
+
+    @AfterEach
+    public void tearDown() throws Exception {
+        server.verify();
     }
 }

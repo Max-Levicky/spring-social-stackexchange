@@ -3,7 +3,7 @@ package org.webtree.social.stackexchange.api.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.webtree.social.stackexchange.domain.ResponseWrapper;
 import org.webtree.social.stackexchange.domain.Site;
@@ -35,6 +35,5 @@ public class SiteTemplateTest extends AbstractApiTest {
 
         List<Site> sitesFromApi = stackExchange.siteOperations().getActualSites();
         assertThat(sitesFromApi).containsExactlyInAnyOrder(stack, apps);
-        server.verify();
-    }
+        }
 }
