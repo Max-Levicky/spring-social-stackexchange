@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import org.webtree.social.stackexchange.converter.UnixTimestampToDate;
+import org.webtree.social.stackexchange.converter.UnixTimestampToLocalDateTime;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -21,7 +21,7 @@ public class User {
 
     private boolean isEmployee;
 
-    @JsonDeserialize(using = UnixTimestampToDate.class)
+    @JsonDeserialize(using = UnixTimestampToLocalDateTime.class)
     private LocalDateTime lastAccessDate;
 
     private Integer reputationChangeYear;
@@ -36,7 +36,7 @@ public class User {
 
     private Integer reputation;
 
-    @JsonDeserialize(using = UnixTimestampToDate.class)
+    @JsonDeserialize(using = UnixTimestampToLocalDateTime.class)
     private LocalDateTime creationDate;
 
     private String userType;

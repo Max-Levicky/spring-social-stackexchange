@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import org.webtree.social.stackexchange.converter.UnixTimestampToDate;
+import org.webtree.social.stackexchange.converter.UnixTimestampToLocalDateTime;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -17,13 +17,13 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Site {
 
-   @JsonDeserialize(using = UnixTimestampToDate.class)
+   @JsonDeserialize(using = UnixTimestampToLocalDateTime.class)
     private LocalDateTime launchDate;
 
-    @JsonDeserialize(using = UnixTimestampToDate.class)
+    @JsonDeserialize(using = UnixTimestampToLocalDateTime.class)
     private LocalDateTime openBetaDate;
 
-    @JsonDeserialize(using = UnixTimestampToDate.class)
+    @JsonDeserialize(using = UnixTimestampToLocalDateTime.class)
     private LocalDateTime closedBetaDate;
 
     private String siteState;

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import org.webtree.social.stackexchange.converter.UnixTimestampToDate;
+import org.webtree.social.stackexchange.converter.UnixTimestampToLocalDateTime;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -21,10 +21,10 @@ public class NetworkUser {
 
     private Integer answerCount;
 
-    @JsonDeserialize(using = UnixTimestampToDate.class)
+    @JsonDeserialize(using = UnixTimestampToLocalDateTime.class)
     private LocalDateTime lastAccessDate;
 
-    @JsonDeserialize(using = UnixTimestampToDate.class)
+    @JsonDeserialize(using = UnixTimestampToLocalDateTime.class)
     private LocalDateTime creationDate;
 
     private Integer accountId;
