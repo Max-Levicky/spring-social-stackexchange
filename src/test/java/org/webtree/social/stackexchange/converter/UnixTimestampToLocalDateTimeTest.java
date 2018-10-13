@@ -1,13 +1,10 @@
 package org.webtree.social.stackexchange.converter;
 
 import com.fasterxml.jackson.core.*;
-
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
@@ -18,7 +15,7 @@ import static org.mockito.Mockito.when;
  * Created by Udjin Skobelev on 07.10.2018.
  */
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UnixTimestampToLocalDateTimeTest {
     //Thursday, 31 July 2008, 0:00:00
     private final static String UNIX_TIME_IN_SECONDS = "1217462400";
