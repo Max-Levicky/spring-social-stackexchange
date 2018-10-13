@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.webtree.social.stackexchange.converter.UnixTimestampToDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -22,7 +22,7 @@ public class User {
     private boolean isEmployee;
 
     @JsonDeserialize(using = UnixTimestampToDate.class)
-    private Date lastAccessDate;
+    private LocalDateTime lastAccessDate;
 
     private Integer reputationChangeYear;
 
@@ -37,7 +37,7 @@ public class User {
     private Integer reputation;
 
     @JsonDeserialize(using = UnixTimestampToDate.class)
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     private String userType;
 
@@ -68,9 +68,9 @@ public class User {
         return isEmployee;
     }
 
-    public Date getLastAccessDate() {
-        return lastAccessDate;
-    }
+    public LocalDateTime getLastAccessDate() { return lastAccessDate; }
+
+    public LocalDateTime getCreationDate() { return creationDate; }
 
     public Integer getReputationChangeYear() {
         return reputationChangeYear;
@@ -94,10 +94,6 @@ public class User {
 
     public Integer getReputation() {
         return reputation;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
     }
 
     public String getUserType() {
@@ -149,7 +145,22 @@ public class User {
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(accountId, isEmployee, lastAccessDate, reputationChangeYear, reputationChangeQuarter, reputationChangeMonth, reputationChangeWeek, reputationChangeDay, reputation, creationDate, userType, userId, location, link, profileImage, displayName);
+        return Objects.hash(
+                accountId,
+                isEmployee,
+                lastAccessDate,
+                reputationChangeYear,
+                reputationChangeQuarter,
+                reputationChangeMonth,
+                reputationChangeWeek,
+                reputationChangeDay,
+                reputation,
+                creationDate,
+                userType,
+                userId,
+                location,
+                link,
+                profileImage,
+                displayName);
     }
 }

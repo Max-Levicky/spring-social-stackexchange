@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.webtree.social.stackexchange.converter.UnixTimestampToDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -22,10 +22,10 @@ public class NetworkUser {
     private Integer answerCount;
 
     @JsonDeserialize(using = UnixTimestampToDate.class)
-    private Date lastAccessDate;
+    private LocalDateTime lastAccessDate;
 
     @JsonDeserialize(using = UnixTimestampToDate.class)
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     private Integer accountId;
 
@@ -53,13 +53,9 @@ public class NetworkUser {
         return answerCount;
     }
 
-    public Date getLastAccessDate() {
-        return lastAccessDate;
-    }
+    public LocalDateTime getLastAccessDate() { return lastAccessDate; }
 
-    public Date getCreationDate() {
-        return creationDate;
-    }
+    public LocalDateTime getCreationDate() { return creationDate; }
 
     public Integer getAccountId() {
         return accountId;

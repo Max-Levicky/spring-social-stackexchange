@@ -5,6 +5,7 @@ package org.webtree.social.stackexchange.api;
  */
 
 public class ErrorCodes {
+    public static final int UNKNOWN_ERROR = 0;
     public static final int BAD_PARAMETER = 400;
     public static final int ACCESS_TOKEN_REQUIRED = 401;
     public static final int INVALID_ACCESS_TOKEN = 402;

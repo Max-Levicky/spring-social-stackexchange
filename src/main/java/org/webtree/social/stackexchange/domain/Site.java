@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.webtree.social.stackexchange.converter.UnixTimestampToDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -17,14 +17,14 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Site {
 
-    @JsonDeserialize(using = UnixTimestampToDate.class)
-    private Date launchDate;
+   @JsonDeserialize(using = UnixTimestampToDate.class)
+    private LocalDateTime launchDate;
 
     @JsonDeserialize(using = UnixTimestampToDate.class)
-    private Date openBetaDate;
+    private LocalDateTime openBetaDate;
 
     @JsonDeserialize(using = UnixTimestampToDate.class)
-    private Date closedBetaDate;
+    private LocalDateTime closedBetaDate;
 
     private String siteState;
 
@@ -54,17 +54,11 @@ public class Site {
         this.name = name;
     }
 
-    public Date getLaunchDate() {
-        return launchDate;
-    }
+    public LocalDateTime getLaunchDate() { return launchDate; }
 
-    public Date getOpenBetaDate() {
-        return openBetaDate;
-    }
+    public LocalDateTime getOpenBetaDate() { return openBetaDate; }
 
-    public Date getClosedBetaDate() {
-        return closedBetaDate;
-    }
+    public LocalDateTime getClosedBetaDate() { return closedBetaDate; }
 
     public String getSiteState() {
         return siteState;
@@ -129,6 +123,19 @@ public class Site {
     @Override
     public int hashCode() {
 
-        return Objects.hash(launchDate, openBetaDate, closedBetaDate, siteState, twitterAccount, faviconUrl, iconUrl, audience, siteUrl, apiSiteParameter, logoUrl, name, siteType);
+        return Objects.hash(
+                launchDate,
+                openBetaDate,
+                closedBetaDate,
+                siteState,
+                twitterAccount,
+                faviconUrl,
+                iconUrl,
+                audience,
+                siteUrl,
+                apiSiteParameter,
+                logoUrl,
+                name,
+                siteType);
     }
 }
