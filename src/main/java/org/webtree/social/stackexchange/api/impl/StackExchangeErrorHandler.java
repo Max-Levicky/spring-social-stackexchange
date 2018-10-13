@@ -1,20 +1,26 @@
 package org.webtree.social.stackexchange.api.impl;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpStatus;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.social.*;
 import org.springframework.web.client.DefaultResponseErrorHandler;
-import org.webtree.social.stackexchange.api.StackExchangeError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.webtree.social.stackexchange.api.ErrorHandler;
 
-import java.io.*;
+import org.webtree.social.stackexchange.api.StackExchangeError;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.webtree.social.stackexchange.api.ErrorCodes.*;
+
 
 /**
  * Created by Udjin Skobelev on 29.09.2018.
@@ -24,88 +30,84 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(StackExchangeErrorHandler.class);
     private static final String STACK_EXCHANGE_PROVIDER_ID = "stackExchange";
+    private final Map<Integer, ErrorHandler> handlers = Stream.of()
+
+     {
+        handlers = new HashMap<>();
+
+        handlers.put(BAD_PARAMETER, (error) -> {
+            throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage(), null);
+        });
+        handlers.put(ACCESS_TOKEN_REQUIRED, (error) -> {
+            throw new MissingAuthorizationException(STACK_EXCHANGE_PROVIDER_ID);
+        });
+        handlers.put(INVALID_ACCESS_TOKEN, (error) -> {
+            throw new InvalidAuthorizationException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+        });
+        handlers.put(ACCESS_DENIED, (error) -> {
+            throw new InsufficientPermissionException(STACK_EXCHANGE_PROVIDER_ID);
+        });
+        handlers.put(NO_METHOD, (error) -> {
+            throw new ResourceNotFoundException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+        });
+        handlers.put(KEY_REQUIRED, (error) -> {
+            throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage(), null);
+        });
+        handlers.put(ACCESS_TOKEN_COMPROMISED, (error) -> {
+            throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage(), null);
+        });
+        handlers.put(WRITE_FAILED, (error) -> {
+            throw new InternalServerErrorException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+        });
+        handlers.put(DUPLICATE_REQUEST, (error) -> {
+            throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage(), null);
+        });
+        handlers.put(INTERNAL_ERROR, (error) -> {
+            throw new InternalServerErrorException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+        });
+        handlers.put(THROTTLE_VIOLATION, (error) -> {
+            throw new RateLimitExceededException(STACK_EXCHANGE_PROVIDER_ID);
+        });
+        handlers.put(EMPORARITY_UNAVAILABLE, (error) -> {
+            throw new ServerException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+        });
+        handlers.put(UNKNOWN_ERROR, (error) -> {
+            throw new ApiException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+        });
+    }
 
     StackExchangeErrorHandler() {
     }
 
     public void handleError(ClientHttpResponse response) throws IOException {
         StackExchangeError error = extractErrorFromResponse(response);
-        handleStackExchangeError(response.getStatusCode(), error);
+        handleStackExchangeError(error);
     }
 
-    void handleStackExchangeError(HttpStatus statusCode, StackExchangeError error) {
-        if (error != null && error.getCode() != null) {
-            int code = error.getCode();
-            switch (code) {
-                case BAD_PARAMETER:
-                    throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getMessage(), null);
-                case ACCESS_TOKEN_REQUIRED:
-                    throw new MissingAuthorizationException(STACK_EXCHANGE_PROVIDER_ID);
-                case INVALID_ACCESS_TOKEN:
-                    throw new InvalidAuthorizationException(STACK_EXCHANGE_PROVIDER_ID, error.getMessage());
-                case ACCESS_DENIED:
-                    throw new InsufficientPermissionException(STACK_EXCHANGE_PROVIDER_ID);
-                case NO_METHOD:
-                    throw new ResourceNotFoundException(STACK_EXCHANGE_PROVIDER_ID, error.getMessage());
-                case KEY_REQUIRED:
-                    throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getMessage(), null);
-                case ACCESS_TOKEN_COMPROMISED:
-                    throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getMessage(), null);
-                case WRITE_FAILED:
-                    throw new InternalServerErrorException(STACK_EXCHANGE_PROVIDER_ID, error.getMessage());
-                case DUPLICATE_REQUEST:
-                    throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getMessage(), null);
-                case INTERNAL_ERROR:
-                    throw new InternalServerErrorException(STACK_EXCHANGE_PROVIDER_ID, error.getMessage());
-                case THROTTLE_VIOLATION:
-                    throw new RateLimitExceededException(STACK_EXCHANGE_PROVIDER_ID);
-                case EMPORARITY_UNAVAILABLE:
-                    throw new ServerException(STACK_EXCHANGE_PROVIDER_ID, error.getMessage());
-                default:
-                    throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, "Something goes wrong", null);
-            }
-        } else {
-            throw new ServerException(STACK_EXCHANGE_PROVIDER_ID, " Error code is " + statusCode);
-        }
+    void handleStackExchangeError(StackExchangeError error) {
+        handlers.get(error.getErrorId()).handle(error);
     }
 
     private StackExchangeError extractErrorFromResponse(ClientHttpResponse response) throws IOException {
-        String json = readResponseJson(response);
+        ObjectMapper mapper = new ObjectMapper();
+
         try {
-            ObjectMapper mapper = new ObjectMapper(new JsonFactory());
-            JsonNode jsonNode = mapper.readValue(json, JsonNode.class);
-            if (jsonNode.has("error_id")) {
-                Integer code = jsonNode.get("error_id").intValue();
-                String message = jsonNode.get("error_message").asText();
-                String name = jsonNode.get("error_name").asText();
-                StackExchangeError error = new StackExchangeError(code, message, name);
+            StackExchangeError error = mapper.readValue(response.getBody(), StackExchangeError.class);
 
-                logger.debug("StackExchange error: ");
-                logger.debug("   CODE     : {}", jsonNode.get("error_id"));
-                logger.debug("   MESSAGE  : {}", jsonNode.get("error_message"));
-                logger.debug("   NAME     : {}", jsonNode.get("error_name"));
+            logger.debug("StackExchange error: ");
+            logger.debug("   CODE     : {}", error.getErrorId());
+            logger.debug("   MESSAGE  : {}", error.getErrorMessage());
+            logger.debug("   NAME     : {}", error.getErrorName());
 
-                return error;
-            }
-
-        } catch (JsonParseException var13) {
-            return null;
+            return error;
+        } catch (JsonParseException exception) {
+            return new StackExchangeError(0, "Something goes wrong", null);
         }
-        return null;
-    }
-
-    private String readResponseJson(ClientHttpResponse response) throws IOException {
-        String json = readFully(response.getBody());
-        logger.debug("Error from StackExchange: {}", json);
-        return json;
-    }
-
-    private String readFully(InputStream in) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        StringBuilder sb = new StringBuilder();
-        while (reader.ready()) {
-            sb.append(reader.readLine());
-        }
-        return sb.toString();
     }
 }
+
+
+
+
+
+

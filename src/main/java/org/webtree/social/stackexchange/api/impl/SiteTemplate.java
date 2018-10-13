@@ -1,7 +1,6 @@
 package org.webtree.social.stackexchange.api.impl;
 
-import org.springframework.web.client.RestTemplate;
-import org.webtree.social.stackexchange.api.Api;
+import org.webtree.social.stackexchange.api.StackObjectFetcher;
 import org.webtree.social.stackexchange.domain.Site;
 import org.webtree.social.stackexchange.api.SiteOperations;
 
@@ -12,16 +11,14 @@ import java.util.List;
  */
 
 public class SiteTemplate implements SiteOperations {
-    private final Api api;
-    private final RestTemplate restTemplate;
+    private StackObjectFetcher stackObjectFetcher;
 
-    public SiteTemplate(Api api, RestTemplate restTemplate) {
-        this.api = api;
-        this.restTemplate = restTemplate;
+    public SiteTemplate(StackObjectFetcher stackObjectFetcher) {
+        this.stackObjectFetcher = stackObjectFetcher;
     }
 
     @Override
     public List<Site> getActualSites() {
-        return api.fetchObject("sites",Site.class).getItems();
+        return stackObjectFetcher.fetchObject("sites", Site.class).getItems();
     }
 }
