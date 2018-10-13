@@ -13,7 +13,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
  * Created by Udjin Skobelev on 06.10.2018.
  */
 
-public class SiteTemplateIntegrationTest extends AbstractApiIntegrationTest {
+public class SiteTemplateIntegrationTest extends AbstractStackObjectFetcherIntegrationTest {
     private static String SELECTED_SITE = "stackoverflow";
 
     @Test

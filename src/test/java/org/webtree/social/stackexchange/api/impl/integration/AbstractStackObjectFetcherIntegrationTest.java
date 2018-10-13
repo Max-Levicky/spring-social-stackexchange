@@ -9,7 +9,7 @@ import org.webtree.social.stackexchange.api.impl.StackExchangeTemplate;
  * Created by Udjin Skobelev on 06.10.2018.
  */
 
-public abstract class AbstractApiIntegrationTest {
+public abstract class AbstractStackObjectFetcherIntegrationTest {
     static String TOKEN;
     static String APP_KEY;
     StackExchange stackExchange;

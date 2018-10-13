@@ -1,8 +1,6 @@
 package org.webtree.social.stackexchange.api.impl;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.webtree.social.stackexchange.domain.ResponseWrapper;
@@ -10,7 +8,6 @@ import org.webtree.social.stackexchange.domain.Site;
 
 import java.util.Arrays;
 import java.util.List;
-
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -20,7 +17,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 /**
  * Created by Udjin Skobelev on 06.10.2018.
  */
-public class SiteTemplateTest extends AbstractApiTest {
+public class SiteTemplateTest extends AbstractStackObjectFetcherTest {
 
     @Test
     public void shouldReturnSites() throws JsonProcessingException {
@@ -35,5 +32,5 @@ public class SiteTemplateTest extends AbstractApiTest {
 
         List<Site> sitesFromApi = stackExchange.siteOperations().getActualSites();
         assertThat(sitesFromApi).containsExactlyInAnyOrder(stack, apps);
-        }
+    }
 }

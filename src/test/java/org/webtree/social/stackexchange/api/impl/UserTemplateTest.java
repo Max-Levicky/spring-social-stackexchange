@@ -20,7 +20,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
  * Created by Udjin Skobelev on 06.10.2018.
  */
 
-public class UserTemplateTest extends AbstractApiTest {
+public class UserTemplateTest extends AbstractStackObjectFetcherTest {
 
     @Test
     public void shouldReturnNetworkUsers() throws JsonProcessingException {
