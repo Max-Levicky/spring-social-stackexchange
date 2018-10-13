@@ -3,6 +3,7 @@ package org.webtree.social.stackexchange.api.impl;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.sun.javafx.collections.MappingChange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.client.ClientHttpResponse;
@@ -30,7 +31,7 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(StackExchangeErrorHandler.class);
     private static final String STACK_EXCHANGE_PROVIDER_ID = "stackExchange";
-    private final Map<Integer, ErrorHandler> handlers = Stream.of()
+    private final Map<Integer, ErrorHandler> handlers ;
 
      {
         handlers = new HashMap<>();
