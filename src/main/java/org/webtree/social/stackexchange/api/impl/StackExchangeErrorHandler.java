@@ -1,6 +1,7 @@
 package org.webtree.social.stackexchange.api.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.google.common.collect.ImmutableMap;
@@ -16,7 +17,7 @@ import org.webtree.social.stackexchange.api.StackExchangeError;
 import java.io.IOException;
 import java.util.Map;
 
-import static org.webtree.social.stackexchange.api.ErrorCodes.*;
+import static java.net.HttpURLConnection.*;
 
 /**
  * Created by Udjin Skobelev on 29.09.2018.
@@ -25,47 +26,44 @@ import static org.webtree.social.stackexchange.api.ErrorCodes.*;
 public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(StackExchangeErrorHandler.class);
-    private static final String STACK_EXCHANGE_PROVIDER_ID = "stackExchange";
+    private static final String PROVIDER_ID = "stackExchange";
     private Map<Integer, ErrorHandler> handlers = ImmutableMap.<Integer, ErrorHandler>builder()
 
-            .put(BAD_PARAMETER, (error) -> {
-                throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage(), null);
+            .put(HTTP_BAD_REQUEST, (error) -> {
+                throw new UncategorizedApiException(PROVIDER_ID, error.getErrorMessage(), null);
             })
-            .put(ACCESS_TOKEN_REQUIRED, (error) -> {
-                throw new MissingAuthorizationException(STACK_EXCHANGE_PROVIDER_ID);
+            .put(HTTP_UNAUTHORIZED, (error) -> {
+                throw new MissingAuthorizationException(PROVIDER_ID);
             })
-            .put(INVALID_ACCESS_TOKEN, (error) -> {
-                throw new InvalidAuthorizationException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+            .put(HTTP_PAYMENT_REQUIRED, (error) -> {
+                throw new InvalidAuthorizationException(PROVIDER_ID, error.getErrorMessage());
             })
-            .put(ACCESS_DENIED, (error) -> {
-                throw new InsufficientPermissionException(STACK_EXCHANGE_PROVIDER_ID);
+            .put(HTTP_FORBIDDEN, (error) -> {
+                throw new InsufficientPermissionException(PROVIDER_ID);
             })
-            .put(NO_METHOD, (error) -> {
-                throw new ResourceNotFoundException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+            .put(HTTP_NOT_FOUND, (error) -> {
+                throw new ResourceNotFoundException(PROVIDER_ID, error.getErrorMessage());
             })
-            .put(KEY_REQUIRED, (error) -> {
-                throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage(), null);
+            .put(HTTP_BAD_METHOD, (error) -> {
+                throw new UncategorizedApiException(PROVIDER_ID, error.getErrorMessage(), null);
             })
-            .put(ACCESS_TOKEN_COMPROMISED, (error) -> {
-                throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage(), null);
+            .put(HTTP_NOT_ACCEPTABLE, (error) -> {
+                throw new UncategorizedApiException(PROVIDER_ID, error.getErrorMessage(), null);
             })
-            .put(WRITE_FAILED, (error) -> {
-                throw new InternalServerErrorException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+            .put(HTTP_PROXY_AUTH, (error) -> {
+                throw new InternalServerErrorException(PROVIDER_ID, error.getErrorMessage());
             })
-            .put(DUPLICATE_REQUEST, (error) -> {
-                throw new UncategorizedApiException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage(), null);
+            .put(HTTP_CONFLICT, (error) -> {
+                throw new UncategorizedApiException(PROVIDER_ID, error.getErrorMessage(), null);
             })
-            .put(INTERNAL_ERROR, (error) -> {
-                throw new InternalServerErrorException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+            .put(HTTP_INTERNAL_ERROR, (error) -> {
+                throw new InternalServerErrorException(PROVIDER_ID, error.getErrorMessage());
             })
-            .put(THROTTLE_VIOLATION, (error) -> {
-                throw new RateLimitExceededException(STACK_EXCHANGE_PROVIDER_ID);
+            .put(HTTP_NOT_IMPLEMENTED, (error) -> {
+                throw new RateLimitExceededException(PROVIDER_ID);
             })
-            .put(EMPORARITY_UNAVAILABLE, (error) -> {
-                throw new ServerException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
-            })
-            .put(UNKNOWN_ERROR, (error) -> {
-                throw new ApiException(STACK_EXCHANGE_PROVIDER_ID, error.getErrorMessage());
+            .put(HTTP_BAD_GATEWAY, (error) -> {
+                throw new ServerException(PROVIDER_ID, error.getErrorMessage());
             }).build();
 
     StackExchangeErrorHandler() {
@@ -77,7 +75,9 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
     }
 
     void handleStackExchangeError(StackExchangeError error) {
-        handlers.get(error.getErrorId()).handle(error);
+        handlers.getOrDefault(error.getErrorId(), (defaultError) -> {
+            throw new ApiException(PROVIDER_ID, defaultError.getErrorMessage());
+        }).handle(error);
     }
 
     private StackExchangeError extractErrorFromResponse(ClientHttpResponse response) throws IOException {
@@ -92,14 +92,8 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
             logger.debug("   NAME     : {}", error.getErrorName());
 
             return error;
-        } catch (JsonParseException exception) {
-            return new StackExchangeError(0, "Something goes wrong", null);
+        } catch (JsonProcessingException exception) {
+            throw new ApiException(PROVIDER_ID, exception.getMessage());
         }
     }
 }
-
-
-
-
-
-

@@ -1,5 +1,6 @@
 package org.webtree.social.stackexchange.api.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +19,6 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.webtree.social.stackexchange.api.ErrorCodes.*;
-
 
 /**
  * Created by Udjin Skobelev on 05.10.2018.
@@ -40,8 +39,8 @@ public class StackExchangeErrorHandlerTest {
 
     @Test
     public void shouldExtractErrorFromResponseAndThrowAppropriateException() throws IOException {
-        StackExchangeError badParameterError = new StackExchangeError(BAD_PARAMETER, MESSAGE, ERROR_NAME);
-        String json = objectMapper.writeValueAsString(badParameterError);
+        StackExchangeError error = new StackExchangeError(400, MESSAGE, ERROR_NAME);
+        String json = objectMapper.writeValueAsString(error);
         MockClientHttpResponse response = new MockClientHttpResponse(json.getBytes(), HttpStatus.BAD_REQUEST);
         assertThrows(UncategorizedApiException.class, () -> errorHandler.handleError(response));
     }
@@ -50,8 +49,8 @@ public class StackExchangeErrorHandlerTest {
     @ParameterizedTest(name = "\"{0}\" error code should thrown {1}")
     @MethodSource(value = "createErrorCodeAndExceptionPair")
     public void shouldThrowExpectedException(int errorCode, Class exceptionClass) {
-        StackExchangeError badParameterError = new StackExchangeError(errorCode, MESSAGE, ERROR_NAME);
-        assertThrows(exceptionClass, () -> errorHandler.handleStackExchangeError(badParameterError));
+        StackExchangeError error = new StackExchangeError(errorCode, MESSAGE, ERROR_NAME);
+        assertThrows(exceptionClass, () -> errorHandler.handleStackExchangeError(error));
     }
 
     private static Stream<Arguments> createErrorCodeAndExceptionPair() {
@@ -67,8 +66,27 @@ public class StackExchangeErrorHandlerTest {
                 Arguments.of(409, UncategorizedApiException.class),
                 Arguments.of(500, InternalServerErrorException.class),
                 Arguments.of(501, RateLimitExceededException.class),
-                Arguments.of(502, ServerException.class),
-                Arguments.of(0, ApiException.class));
+                Arguments.of(502, ServerException.class));
+    }
+
+    @Test
+    public void shouldThrowDefaultExceptionIfErrorCodeIsUnknown() {
+        StackExchangeError error = new StackExchangeError(600, MESSAGE, ERROR_NAME);
+        assertThrows(ApiException.class, () -> errorHandler.handleStackExchangeError(error));
+    }
+
+    @Test
+    public void shouldThrowExceptionIfCantReadJson() {
+        String json = "some random string";
+        MockClientHttpResponse response = new MockClientHttpResponse(json.getBytes(), HttpStatus.BAD_REQUEST);
+        assertThrows(ApiException.class, () -> errorHandler.handleError(response));
+    }
+
+    @Test
+    public void shouldThrowExceptionIfPropertiesAreEmpty() throws JsonProcessingException {
+        StackExchangeError error = new StackExchangeError(null, null, ERROR_NAME);
+        String json = objectMapper.writeValueAsString(error);
+        MockClientHttpResponse response = new MockClientHttpResponse(json.getBytes(), HttpStatus.BAD_REQUEST);
+        assertThrows(ApiException.class, () -> errorHandler.handleError(response));
     }
 }
-
