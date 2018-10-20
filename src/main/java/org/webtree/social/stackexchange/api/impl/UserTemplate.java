@@ -3,7 +3,6 @@ package org.webtree.social.stackexchange.api.impl;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.webtree.social.stackexchange.api.*;
-import org.webtree.social.stackexchange.domain.NetworkUser;
 import org.webtree.social.stackexchange.domain.User;
 
 import java.util.List;
@@ -23,11 +22,6 @@ public class UserTemplate implements UserOperations {
     public List<User> getUserProfileAssociatedWithSite(String siteName) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("site", siteName);
-        return stackObjectFetcher.fetchObject("me", User.class, queryParams).getItems();
-    }
-
-    @Override
-    public List<NetworkUser> getUserAssociatedAccounts() {
-        return stackObjectFetcher.fetchObject("me/associated", NetworkUser.class).getItems();
+        return stackObjectFetcher.fetch("me", queryParams).getItems();
     }
 }

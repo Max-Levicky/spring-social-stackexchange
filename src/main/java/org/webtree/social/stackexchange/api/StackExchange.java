@@ -6,5 +6,5 @@ package org.webtree.social.stackexchange.api;
 public interface StackExchange {
     UserOperations userOperations();
     SiteOperations siteOperations();
-    String getBaseApiUrl();
+    NetworkUserOperations networkUserOperations();
 }

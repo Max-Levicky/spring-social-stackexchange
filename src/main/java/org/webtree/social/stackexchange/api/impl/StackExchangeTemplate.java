@@ -9,6 +9,9 @@ import org.springframework.social.ApiBinding;
 
 import org.springframework.web.client.RestTemplate;
 import org.webtree.social.stackexchange.api.*;
+import org.webtree.social.stackexchange.domain.NetworkUser;
+import org.webtree.social.stackexchange.domain.Site;
+import org.webtree.social.stackexchange.domain.User;
 import org.webtree.social.stackexchange.interceptor.BasicHttpRequestInterceptor;
 
 import java.nio.charset.Charset;
@@ -27,6 +30,7 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
     private String baseApiUrl;
     private RestTemplate restTemplate;
     private UserOperations userOperations;
+    private NetworkUserOperations networkUserOperations;
     private SiteOperations siteOperations;
     private StackObjectFetcher stackObjectFetcher;
 
@@ -50,6 +54,8 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
     public SiteOperations siteOperations() {
         return siteOperations;
     }
+
+    public NetworkUserOperations networkUserOperations() { return networkUserOperations; }
 
     public String getBaseApiUrl() {
         return baseApiUrl;
@@ -112,7 +118,8 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
     }
 
     private void initOperations() {
-        this.userOperations = new UserTemplate(stackObjectFetcher);
-        this.siteOperations = new SiteTemplate(stackObjectFetcher);
+        this.userOperations = new UserTemplate(new StackObjectFetcherImpl<User>(getBaseApiUrl(),getRestTemplate()));
+        this.siteOperations = new SiteTemplate(new StackObjectFetcherImpl<Site>(getBaseApiUrl(),getRestTemplate()));
+        this.networkUserOperations = new NetworkUserTemplate(new StackObjectFetcherImpl<NetworkUser>(getBaseApiUrl(),getRestTemplate()));
     }
 }

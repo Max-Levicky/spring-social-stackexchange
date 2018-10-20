@@ -1,6 +1,5 @@
 package org.webtree.social.stackexchange.api;
 
-import org.webtree.social.stackexchange.domain.NetworkUser;
 import org.webtree.social.stackexchange.domain.User;
 
 import java.util.List;
@@ -11,5 +10,4 @@ import java.util.List;
 
 public interface UserOperations {
     List<User> getUserProfileAssociatedWithSite(String siteName);
-    List<NetworkUser> getUserAssociatedAccounts();
 }
