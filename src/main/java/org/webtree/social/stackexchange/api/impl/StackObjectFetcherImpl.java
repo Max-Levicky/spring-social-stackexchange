@@ -26,7 +26,7 @@ public class StackObjectFetcherImpl implements StackObjectFetcher {
     }
 
     @Override
-    public <T> ResponseWrapper<T> fetchObject(String method, Class<T> type) {
+    public <T> ResponseWrapper<T> fetch(String method, Class<T> type) {
         URI uri = URIBuilder.fromUri(apiUrl + method).build();
         return restTemplate.exchange(uri, HttpMethod.GET, null, new ParameterizedTypeReference<ResponseWrapper<T>>() {
             public Type getType() {
@@ -36,7 +36,7 @@ public class StackObjectFetcherImpl implements StackObjectFetcher {
     }
 
     @Override
-    public <T> ResponseWrapper<T> fetchObject(String methodName, Class<T> itemsType, MultiValueMap<String, String> queryParams) {
+    public <T> ResponseWrapper<T> fetch(String methodName, Class<T> itemsType, MultiValueMap<String, String> queryParams) {
         URI uri = URIBuilder.fromUri(apiUrl + methodName).queryParams(queryParams).build();
         return restTemplate.exchange(uri, HttpMethod.GET, null, new ParameterizedTypeReference<ResponseWrapper<T>>() {
             public Type getType() {

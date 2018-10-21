@@ -13,10 +13,10 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-
 /**
  * Created by Udjin Skobelev on 06.10.2018.
  */
+
 public class SiteTemplateTest extends AbstractStackObjectFetcherTest {
 
     @Test
@@ -27,7 +27,7 @@ public class SiteTemplateTest extends AbstractStackObjectFetcherTest {
         responseWrapper = new ResponseWrapper<>(sites, true, 0, 1);
 
         server
-                .expect(requestTo(stackExchange.getBaseApiUrl() + "sites?" + tokenQueryParams))
+                .expect(requestTo(baseApiUrl + "sites?" + tokenQueryParams))
                 .andRespond(withSuccess(objectMapper.writeValueAsString(responseWrapper), MediaType.APPLICATION_JSON));
 
         List<Site> sitesFromApi = stackExchange.siteOperations().getActualSites();

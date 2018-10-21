@@ -22,6 +22,6 @@ public class UserTemplate implements UserOperations {
     public List<User> getUserProfileAssociatedWithSite(String siteName) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("site", siteName);
-        return stackObjectFetcher.fetch("me", queryParams).getItems();
+        return stackObjectFetcher.fetch("me",User.class, queryParams).getItems();
     }
 }

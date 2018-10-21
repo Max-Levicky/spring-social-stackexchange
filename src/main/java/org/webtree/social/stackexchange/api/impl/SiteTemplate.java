@@ -19,6 +19,6 @@ public class SiteTemplate implements SiteOperations {
 
     @Override
     public List<Site> getActualSites() {
-        return stackObjectFetcher.fetchObject("sites", Site.class).getItems();
+        return stackObjectFetcher.fetch("sites", Site.class).getItems();
     }
 }

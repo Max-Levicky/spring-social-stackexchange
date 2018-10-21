@@ -1,6 +1,5 @@
 package org.webtree.social.stackexchange.api.impl;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -93,7 +92,7 @@ public class StackExchangeErrorHandler extends DefaultResponseErrorHandler {
 
             return error;
         } catch (JsonProcessingException exception) {
-            throw new ApiException(PROVIDER_ID, exception.getMessage());
+            throw new ApiException(PROVIDER_ID, "Cannot process response json body", exception);
         }
     }
 }

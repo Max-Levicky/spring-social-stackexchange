@@ -36,7 +36,7 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
 
 
     public StackExchangeTemplate(String accessToken, String key) {
-        this.baseApiUrl = "https://stackObjectFetcher.stackexchange.com/" + apiVersion + "/";
+        this.baseApiUrl = "https://api.stackexchange.com/" + apiVersion + "/";
         this.accessToken = accessToken;
         this.restTemplate = createRestTemplate(accessToken, key);
         this.stackObjectFetcher = new StackObjectFetcherImpl(baseApiUrl, restTemplate);
@@ -118,8 +118,8 @@ public class StackExchangeTemplate implements ApiBinding, StackExchange {
     }
 
     private void initOperations() {
-        this.userOperations = new UserTemplate(new StackObjectFetcherImpl<User>(getBaseApiUrl(),getRestTemplate()));
-        this.siteOperations = new SiteTemplate(new StackObjectFetcherImpl<Site>(getBaseApiUrl(),getRestTemplate()));
-        this.networkUserOperations = new NetworkUserTemplate(new StackObjectFetcherImpl<NetworkUser>(getBaseApiUrl(),getRestTemplate()));
+        this.userOperations = new UserTemplate(stackObjectFetcher);
+        this.siteOperations = new SiteTemplate(stackObjectFetcher);
+        this.networkUserOperations = new NetworkUserTemplate(stackObjectFetcher);
     }
 }

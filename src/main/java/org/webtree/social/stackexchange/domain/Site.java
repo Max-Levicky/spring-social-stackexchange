@@ -17,7 +17,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Site {
 
-   @JsonDeserialize(using = UnixTimestampToLocalDateTime.class)
+    @JsonDeserialize(using = UnixTimestampToLocalDateTime.class)
     private LocalDateTime launchDate;
 
     @JsonDeserialize(using = UnixTimestampToLocalDateTime.class)

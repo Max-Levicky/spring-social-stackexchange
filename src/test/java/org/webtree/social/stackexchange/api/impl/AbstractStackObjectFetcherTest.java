@@ -21,6 +21,7 @@ public abstract class AbstractStackObjectFetcherTest {
     protected ResponseWrapper responseWrapper;
     protected ObjectMapper objectMapper;
     protected String tokenQueryParams;
+    protected String baseApiUrl;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -28,6 +29,7 @@ public abstract class AbstractStackObjectFetcherTest {
         stackExchange = new StackExchangeTemplate(TOKEN, KEY);
         server = MockRestServiceServer.createServer(((StackExchangeTemplate) stackExchange).getRestTemplate());
         tokenQueryParams =  "key=" + KEY + "&" + "access_token=" + TOKEN;
+        baseApiUrl = ((StackExchangeTemplate) stackExchange).getBaseApiUrl();
     }
 
     @AfterEach
