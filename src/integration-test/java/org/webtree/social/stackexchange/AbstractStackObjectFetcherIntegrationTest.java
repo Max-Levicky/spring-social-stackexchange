@@ -1,5 +1,4 @@
-package org.webtree.social.stackexchange.api.impl.integration;
-
+package org.webtree.social.stackexchange;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.webtree.social.stackexchange.api.StackExchange;
