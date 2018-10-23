@@ -15,7 +15,7 @@ public abstract class AbstractStackObjectFetcherIntegrationTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        TOKEN =  System.getenv("stackexchange_token");
+        TOKEN = System.getenv("stackexchange_token");
         APP_KEY = System.getenv("stackexchange_key");
         stackExchange = new StackExchangeTemplate(TOKEN, APP_KEY);
     }

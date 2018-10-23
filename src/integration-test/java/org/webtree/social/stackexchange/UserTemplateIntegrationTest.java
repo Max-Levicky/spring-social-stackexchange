@@ -1,10 +1,10 @@
 package org.webtree.social.stackexchange;
 
+import org.apache.http.message.AbstractHttpMessage;
 import org.junit.jupiter.api.Test;
-
 import org.webtree.social.stackexchange.domain.User;
 
-import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -17,10 +17,10 @@ public class UserTemplateIntegrationTest extends AbstractStackObjectFetcherInteg
 
     @Test
     public void shouldReturnUserBySiteName() {
-        List<User> users = stackExchange.userOperations().getUserProfileAssociatedWithSite(SITE_API_NAME);
-        assertThat(users).isNotEmpty();
-        assertThat(users.get(0).getReputation()).isNotNull().isPositive();
-        assertThat(users.get(0).getAccountId()).isNotNull().isPositive();
-        assertThat(users.get(0).getDisplayName()).isNotEmpty();
+        Optional<User> optionalUser = stackExchange.userOperations().getUserProfileBySiteName(SITE_API_NAME);
+        assertThat(optionalUser.isPresent()).isTrue();
+        assertThat(optionalUser.get().getReputation()).isNotNull().isPositive();
+        assertThat(optionalUser.get().getAccountId()).isNotNull().isPositive();
+        assertThat(optionalUser.get().getDisplayName()).isNotEmpty();
     }
 }
