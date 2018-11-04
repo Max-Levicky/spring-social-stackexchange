@@ -1,0 +1,34 @@
+pipeline {
+    agent {
+        docker {
+            image 'maven:3'
+            args '-v jenkins_m2:/root/.m2'
+        }
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('Publish in artifactory') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'artifactory-passwd', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        server = Artifactory.newServer url: 'https://artifactory.webtree.org', username: ${USERNAME}, password: ${PASSWORD}
+
+                    }
+                    def uploadSpec = """{
+                      "files": [
+                        {
+                          "pattern": "spring-social-stackexchange-*-SNAPSHOT.jar",
+                          "target": "target/"
+                        }
+                     ]
+                    }"""
+                    server.upload(uploadSpec)
+                }
+            }
+        }
+    }
+}
